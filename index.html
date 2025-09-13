@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Staffroom Monitor</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <style>
+    body { background: #121212; color: #fff; font-family: Arial; text-align: center; padding: 50px; }
+    .status { font-size: 3em; padding: 20px; margin: 20px; border-radius: 10px; }
+    .active { background-color: #004080; color: #00ffcc; }
+    .inactive { background-color: #222; color: #f44336; }
+  </style>
+</head>
+<body>
+
+  <h1>Live Teacher Status</h1>
+  <div id="statusDiv" class="status inactive">Inactive</div>
+  <div>Timer: <span id="timerDiv">0</span>s</div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBmhrJSgQccnrQkK6nFF3ex0a4k3de9KPU",
+      authDomain: "staffroommonitor.firebaseapp.com",
+      databaseURL: "https://staffroommonitor-default-rtdb.firebaseio.com/ ",
+      projectId: "staffroommonitor  "
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    const statusRef = firebase.database().ref('/teacher/status');
+
+    statusRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      document.getElementById('statusDiv').textContent = data.state;
+      document.getElementById('timerDiv').textContent = data.timer;
+      document.getElementById('statusDiv').className = "status " + (data.state === "Active" ? "active" : "inactive");
+    });
+  </script>
+
+</body>
+</html>
