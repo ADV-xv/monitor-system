@@ -54,20 +54,16 @@
 
     const statusRef = firebase.database().ref('/teacher/status');
 
-    statusRef.on('value', (snapshot) => {
-      const data = snapshot.val();
-      if (!data) return; // Prevent errors if null
+statusRef.on('value', (snapshot) => {
+  const data = snapshot.val();
+  if (!data) return;
 
-      // Update status text
-      const statusDiv = document.getElementById('statusDiv');
-      statusDiv.textContent = data.state;
+  const timer = data.timer < 0 ? 0 : data.timer; // Prevent negative/huge numbers
+  document.getElementById('statusDiv').textContent = data.state;
+  document.getElementById('timerDiv').textContent = timer;
+  document.getElementById('statusDiv').className = "status " + (data.state === "Active" ? "active" : "inactive");
+});
 
-      // Update timer
-      document.getElementById('timerDiv').textContent = data.timer;
-
-      // Update color and style based on status
-      statusDiv.className = "status " + (data.state === "Active" ? "active" : "inactive");
-    });
   </script>
 
 </body>
